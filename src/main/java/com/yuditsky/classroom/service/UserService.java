@@ -17,7 +17,7 @@ public interface UserService {
 
     User logIn(String username);
 
-    void logOut(User user);
+    void logOut(String username);
 
     List<User> getAuthorizedUsers();
 }

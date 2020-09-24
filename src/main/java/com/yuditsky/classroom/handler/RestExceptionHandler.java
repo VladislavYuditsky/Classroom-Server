@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class RestExceptionHandler {
 
     @ExceptionHandler({AlreadyAuthorizedException.class, AccessDeniedException.class})
-    public ResponseEntity<ErrorMessage> handle(final AlreadyAuthorizedException exception) {
+    public ResponseEntity<ErrorMessage> handle(ServiceException exception) {
         log.error(exception);
         return handleThrowable(exception, HttpStatus.FORBIDDEN);
     }

@@ -100,14 +100,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void logOut(User user) {
-        user = findByUsername(user.getUsername());
+    public void logOut(String username) {
+        User user = findByUsername(username);
         if (user.isAuthorized()) {
             user.setAuthorized(false);
             user.setHandUp(false);
             update(user);
         } else {
-            throw new AccessDeniedException("User with username {0} is not authorized", user.getUsername());
+            throw new AccessDeniedException("User with username {0} is not authorized", username);
         }
     }
 

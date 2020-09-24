@@ -40,7 +40,7 @@ public class ClassroomController {
 
     @PostMapping("signOut")
     public ResponseEntity<?> signOut(@RequestBody User user) {
-        userService.logOut(user);
+        userService.logOut(user.getUsername());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
