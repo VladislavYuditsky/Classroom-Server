@@ -11,6 +11,7 @@ import com.yuditsky.classroom.model.User;
 import com.yuditsky.classroom.repository.UserRepository;
 import com.yuditsky.classroom.service.UserService;
 import com.yuditsky.classroom.validator.impl.UserValidator;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
         }));
         userValidator.validate(user);
         UserEntity userEntity = userDtoToEntityConverter.convert(user);
+        log.debug("Saving userEntity: {}", userEntity);
         return userEntityToDtoConverter.convert(userRepository.save(userEntity));
     }
 
@@ -71,6 +74,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
         userValidator.validate(user);
+        log.debug("Update {}", user);
         userRepository.save(userDtoToEntityConverter.convert(user));
     }
 
