@@ -7,6 +7,7 @@ import com.yuditsky.classroom.exception.AccessDeniedException;
 import com.yuditsky.classroom.exception.AlreadyAuthorizedException;
 import com.yuditsky.classroom.exception.AlreadyExistedException;
 import com.yuditsky.classroom.exception.EntityNotFoundException;
+import com.yuditsky.classroom.model.Role;
 import com.yuditsky.classroom.model.User;
 import com.yuditsky.classroom.repository.UserRepository;
 import com.yuditsky.classroom.service.UserService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -53,15 +55,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findOrCreateByUsername(String username) {
+    public User findByUsernameOrCreate(String username, Set<Role> roles) {
         return userRepository.findByUsername(username).map(userEntityToDtoConverter::convert)
                 .orElseGet(() ->
                         create(User.builder()
                                 .username(username)
                                 .isHandUp(false)
                                 .authorized(false)
+                                .roles(roles)
                                 .build()));
-
     }
 
     @Override
@@ -91,8 +93,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User logIn(String username) {
-        User user = findOrCreateByUsername(username);
+    public User logIn(String username, Set<Role> roles) {
+        User user = findByUsernameOrCreate(username, roles);
         if (!user.isAuthorized()) {
             user.setAuthorized(true);
             update(user);

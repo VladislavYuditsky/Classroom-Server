@@ -1,6 +1,7 @@
 package com.yuditsky.classroom.controller;
 
 import com.yuditsky.classroom.model.AuthenticationRequest;
+import com.yuditsky.classroom.model.Role;
 import com.yuditsky.classroom.model.User;
 import com.yuditsky.classroom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class ClassroomController {
@@ -28,7 +30,8 @@ public class ClassroomController {
     @PostMapping("signIn")
     public ResponseEntity<?> signIn(@RequestBody AuthenticationRequest authenticationRequest) {
         String username = authenticationRequest.getUsername();
-        User user = userService.logIn(username);
+        Set<Role> roles = authenticationRequest.getRoles();
+        User user = userService.logIn(username, roles);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
