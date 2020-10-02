@@ -25,6 +25,9 @@ public class UserEntity {
     private boolean isHandUp;
 
     @Column
+    private String email;
+
+    @Column
     private boolean authorized;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

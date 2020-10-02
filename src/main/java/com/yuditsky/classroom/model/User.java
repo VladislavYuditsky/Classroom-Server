@@ -15,6 +15,7 @@ public class User {
     private Long id;
     private String username;
     private boolean isHandUp;
+    private String email;
     private boolean authorized;
     private Set<Role> roles;
 }
