@@ -9,6 +9,7 @@ import com.yuditsky.classroom.exception.AlreadyExistedException;
 import com.yuditsky.classroom.exception.EntityNotFoundException;
 import com.yuditsky.classroom.model.User;
 import com.yuditsky.classroom.repository.UserRepository;
+import com.yuditsky.classroom.service.LoggerService;
 import com.yuditsky.classroom.service.UserService;
 import com.yuditsky.classroom.validator.impl.UserValidator;
 import lombok.extern.log4j.Log4j2;
@@ -27,18 +28,21 @@ public class UserServiceImpl implements UserService {
     private final UserValidator userValidator;
     private final UserDtoToEntityConverter userDtoToEntityConverter;
     private final UserEntityToDtoConverter userEntityToDtoConverter;
+    private final LoggerService logger;
 
     @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
             UserValidator userValidator,
             UserDtoToEntityConverter userDtoToEntityConverter,
-            UserEntityToDtoConverter userEntityToDtoConverter
+            UserEntityToDtoConverter userEntityToDtoConverter,
+            LoggerService logger
     ) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.userDtoToEntityConverter = userDtoToEntityConverter;
         this.userEntityToDtoConverter = userEntityToDtoConverter;
+        this.logger = logger;
     }
 
     @Override
@@ -72,6 +76,8 @@ public class UserServiceImpl implements UserService {
         if (user.isAuthorized()) {
             user.setHandUp(!user.isHandUp());
             update(user);
+            logger.log(user.getUsername(), "Changed the state of the hand to "
+                    + (user.isHandUp() ? "up" : "down"));
         } else {
             throw new AccessDeniedException("User with username {0} is not authorized", user.getUsername());
         }
@@ -85,6 +91,7 @@ public class UserServiceImpl implements UserService {
         if (!userDb.isAuthorized()) {
             userDb.setAuthorized(true);
             update(userDb);
+            logger.log(userDb.getUsername(), "Logged in");
         } else {
             throw new AlreadyAuthorizedException("User with username {0} is already authorized", user.getUsername());
         }
@@ -99,6 +106,7 @@ public class UserServiceImpl implements UserService {
             user.setAuthorized(false);
             user.setHandUp(false);
             update(user);
+            logger.log(username, "Logged out");
         } else {
             throw new AccessDeniedException("User with username {0} is not authorized", username);
         }
