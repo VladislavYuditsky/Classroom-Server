@@ -7,6 +7,7 @@ import com.yuditsky.classroom.exception.AccessDeniedException;
 import com.yuditsky.classroom.exception.AlreadyAuthorizedException;
 import com.yuditsky.classroom.exception.AlreadyExistedException;
 import com.yuditsky.classroom.exception.EntityNotFoundException;
+import com.yuditsky.classroom.model.Role;
 import com.yuditsky.classroom.model.User;
 import com.yuditsky.classroom.repository.UserRepository;
 import com.yuditsky.classroom.service.LoggerService;
@@ -73,13 +74,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User changeHandState(User user) {
         user = findByUsername(user.getUsername());
-        if (user.isAuthorized()) {
+        if (!user.getRoles().contains(Role.TEACHER) && user.isAuthorized()) {
             user.setHandUp(!user.isHandUp());
             update(user);
             logger.log(user.getUsername(), "Changed the state of the hand to "
                     + (user.isHandUp() ? "up" : "down"));
         } else {
-            throw new AccessDeniedException("User with username {0} is not authorized", user.getUsername());
+            throw new AccessDeniedException("Access denied");
         }
         return user;
     }
