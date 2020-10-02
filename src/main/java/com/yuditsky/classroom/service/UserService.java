@@ -1,5 +1,6 @@
 package com.yuditsky.classroom.service;
 
+import com.yuditsky.classroom.model.Role;
 import com.yuditsky.classroom.model.User;
 
 import java.util.List;
@@ -17,5 +18,7 @@ public interface UserService {
 
     void logOut(String username);
 
-    List<User> getAuthorizedUsers();
+    List<User> findAuthorizedUsers();
+
+    List<User> findByRole(Role role);
 }

@@ -1,6 +1,7 @@
 package com.yuditsky.classroom.repository;
 
 import com.yuditsky.classroom.entity.UserEntity;
+import com.yuditsky.classroom.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUsername(String username);
 
     List<UserEntity> findUserEntitiesByAuthorized(boolean authorized);
+
+    List<UserEntity> findByRoles(Role role);
 }

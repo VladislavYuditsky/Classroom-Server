@@ -114,11 +114,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAuthorizedUsers() {
+    public List<User> findAuthorizedUsers() {
         return userRepository.findUserEntitiesByAuthorized(true)
                 .stream()
                 .map(userEntityToDtoConverter::convert)
-                .sorted(Comparator.comparing(User::getId))
+                .sorted(Comparator.comparing(User::getUsername))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> findByRole(Role role) {
+        return userRepository.findByRoles(role)
+                .stream()
+                .map(userEntityToDtoConverter::convert)
+                .sorted(Comparator.comparing(User::getUsername))
                 .collect(Collectors.toList());
     }
 }

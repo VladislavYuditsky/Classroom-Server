@@ -1,5 +1,6 @@
 package com.yuditsky.classroom.controller;
 
+import com.yuditsky.classroom.model.Role;
 import com.yuditsky.classroom.model.User;
 import com.yuditsky.classroom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +44,19 @@ public class ClassroomController {
 
     @GetMapping("users")
     public ResponseEntity<?> getAuthorizedUsers() {
-        List<User> users = userService.getAuthorizedUsers();
+        List<User> users = userService.findAuthorizedUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("students")
+    public ResponseEntity<?> getStudents() {
+        List<User> students = userService.findByRole(Role.STUDENT);
+        return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
     @SendTo("/topic/users")
     @MessageMapping("updateState")
     public List<User> updateState() {
-        return userService.getAuthorizedUsers();
+        return userService.findAuthorizedUsers();
     }
 }
