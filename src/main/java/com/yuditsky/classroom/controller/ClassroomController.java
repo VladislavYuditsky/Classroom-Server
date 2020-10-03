@@ -1,17 +1,16 @@
 package com.yuditsky.classroom.controller;
 
+import com.yuditsky.classroom.model.Logger;
 import com.yuditsky.classroom.model.Role;
 import com.yuditsky.classroom.model.User;
+import com.yuditsky.classroom.service.LoggerService;
 import com.yuditsky.classroom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,10 +18,12 @@ import java.util.List;
 public class ClassroomController {
 
     private final UserService userService;
+    private final LoggerService loggerService;
 
     @Autowired
-    public ClassroomController(UserService userService) {
+    public ClassroomController(UserService userService, LoggerService loggerService) {
         this.userService = userService;
+        this.loggerService = loggerService;
     }
 
     @PostMapping("signIn")
@@ -52,6 +53,12 @@ public class ClassroomController {
     public ResponseEntity<?> getStudents() {
         List<User> students = userService.findByRole(Role.STUDENT);
         return new ResponseEntity<>(students, HttpStatus.OK);
+    }
+
+    @GetMapping("student/{username}")
+    public ResponseEntity<?> getStudentActions(@PathVariable("username") String username) {
+        List<Logger> logs = loggerService.findByUsername(username);
+        return new ResponseEntity<>(logs, HttpStatus.OK);
     }
 
     @SendTo("/topic/users")

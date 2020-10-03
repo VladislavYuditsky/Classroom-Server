@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoggerServiceImpl implements LoggerService {
@@ -32,8 +35,11 @@ public class LoggerServiceImpl implements LoggerService {
     }
 
     @Override
-    public Logger findByUsername(String username) {
-        return loggerRepository.findByUsername(username).map(loggerEntityToDtoConverter::convert)
-                .orElseGet(Logger::new);
+    public List<Logger> findByUsername(String username) {
+        return loggerRepository.findByUsername(username)
+                .stream()
+                .map(loggerEntityToDtoConverter::convert)
+                .sorted(Comparator.comparing(Logger::getDateTime))
+                .collect(Collectors.toList());
     }
 }
