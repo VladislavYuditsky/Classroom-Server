@@ -1,5 +1,6 @@
 package com.yuditsky.classroom.entity;
 
+import com.yuditsky.classroom.model.Action;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +23,9 @@ public class LoggerEntity {
     @Column
     private String username;
 
-    @Column
-    private String action;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "action")
+    private Action action;
 
     @Column(name = "date")
     private LocalDateTime dateTime;

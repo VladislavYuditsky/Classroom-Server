@@ -7,6 +7,7 @@ import com.yuditsky.classroom.exception.AccessDeniedException;
 import com.yuditsky.classroom.exception.AlreadyAuthorizedException;
 import com.yuditsky.classroom.exception.AlreadyExistedException;
 import com.yuditsky.classroom.exception.EntityNotFoundException;
+import com.yuditsky.classroom.model.Action;
 import com.yuditsky.classroom.model.Role;
 import com.yuditsky.classroom.model.User;
 import com.yuditsky.classroom.repository.UserRepository;
@@ -77,8 +78,7 @@ public class UserServiceImpl implements UserService {
         if (!user.getRoles().contains(Role.TEACHER) && user.isAuthorized()) {
             user.setHandUp(!user.isHandUp());
             update(user);
-            logger.log(user.getUsername(), "Changed the state of the hand to "
-                    + (user.isHandUp() ? "up" : "down"));
+            logger.log(user.getUsername(), user.isHandUp() ? Action.HAND_UP : Action.HAND_DOWN);
         } else {
             throw new AccessDeniedException("Access denied");
         }
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
         if (!userDb.isAuthorized()) {
             userDb.setAuthorized(true);
             update(userDb);
-            logger.log(userDb.getUsername(), "Logged in");
+            logger.log(userDb.getUsername(), Action.LOG_IN);
         } else {
             throw new AlreadyAuthorizedException("User with username {0} is already authorized", user.getUsername());
         }
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
             user.setAuthorized(false);
             user.setHandUp(false);
             update(user);
-            logger.log(username, "Logged out");
+            logger.log(username, Action.LOG_OUT);
         } else {
             throw new AccessDeniedException("User with username {0} is not authorized", username);
         }

@@ -14,6 +14,6 @@ import java.time.LocalDateTime;
 public class Logger {
     private Long id;
     private String username;
-    private String action;
+    private Action action;
     private LocalDateTime dateTime;
 }

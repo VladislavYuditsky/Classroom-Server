@@ -2,6 +2,7 @@ package com.yuditsky.classroom.service.impl;
 
 import com.yuditsky.classroom.converter.LoggerEntityToDtoConverter;
 import com.yuditsky.classroom.entity.LoggerEntity;
+import com.yuditsky.classroom.model.Action;
 import com.yuditsky.classroom.model.Logger;
 import com.yuditsky.classroom.repository.LoggerRepository;
 import com.yuditsky.classroom.service.LoggerService;
@@ -22,7 +23,7 @@ public class LoggerServiceImpl implements LoggerService {
     }
 
     @Override
-    public void log(String username, String action) {
+    public void log(String username, Action action) {
         loggerRepository.save(LoggerEntity.builder()
                 .username(username)
                 .action(action)
