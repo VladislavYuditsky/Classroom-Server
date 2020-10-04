@@ -8,5 +8,5 @@ import java.util.List;
 public interface LoggerService {
     void log(String username, Action action);
 
-    List<Logger> findByUsername(String username);
+    List<Logger> findByUsernameWithFilter(String username, String filter);
 }

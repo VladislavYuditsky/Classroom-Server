@@ -56,8 +56,9 @@ public class ClassroomController {
     }
 
     @GetMapping("student/{username}")
-    public ResponseEntity<?> getStudentActions(@PathVariable("username") String username) {
-        List<Logger> logs = loggerService.findByUsername(username);
+    public ResponseEntity<?> getStudentActions(@PathVariable("username") String username,
+                                               @RequestParam(value = "search") String filter) {
+        List<Logger> logs = loggerService.findByUsernameWithFilter(username, filter);
         return new ResponseEntity<>(logs, HttpStatus.OK);
     }
 

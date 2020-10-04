@@ -32,7 +32,7 @@ public class RestExceptionHandler {
         return handleThrowable(exception, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({ValidationException.class})
+    @ExceptionHandler({ValidationException.class, InvalidDateTimeFormatException.class})
     protected ResponseEntity<ErrorMessage> handleValidationException(ServiceException exception) {
         log.error(exception);
         return handleThrowable(exception, HttpStatus.BAD_REQUEST);
