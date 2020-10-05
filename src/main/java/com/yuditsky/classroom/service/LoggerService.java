@@ -9,4 +9,6 @@ public interface LoggerService {
     void log(String username, Action action);
 
     List<Logger> findByUsernameWithFilter(String username, String filter);
+
+    List<Logger> findAllWithFilter(String filter);
 }

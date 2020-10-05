@@ -1,4 +1,4 @@
-package com.yuditsky.classroom.mail;
+package com.yuditsky.classroom.sender;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -42,6 +42,11 @@ public class LoggerServiceImpl implements LoggerService {
     public List<Logger> findByUsernameWithFilter(String username, String filter) {
         filter = "username:" + username + "," + filter;
 
+        return findAllWithFilter(filter);
+    }
+
+    @Override
+    public List<Logger> findAllWithFilter(String filter) {
         Specification<LoggerEntity> specification = filterToSpecification(filter);
 
         return loggerRepository.findAll(specification)
