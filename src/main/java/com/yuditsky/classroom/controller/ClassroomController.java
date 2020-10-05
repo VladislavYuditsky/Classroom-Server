@@ -1,9 +1,11 @@
 package com.yuditsky.classroom.controller;
 
 import com.yuditsky.classroom.model.Logger;
+import com.yuditsky.classroom.model.Report;
 import com.yuditsky.classroom.model.Role;
 import com.yuditsky.classroom.model.User;
 import com.yuditsky.classroom.service.LoggerService;
+import com.yuditsky.classroom.service.ReportService;
 import com.yuditsky.classroom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +21,13 @@ public class ClassroomController {
 
     private final UserService userService;
     private final LoggerService loggerService;
+    private final ReportService reportService;
 
     @Autowired
-    public ClassroomController(UserService userService, LoggerService loggerService) {
+    public ClassroomController(UserService userService, LoggerService loggerService, ReportService reportService) {
         this.userService = userService;
         this.loggerService = loggerService;
+        this.reportService = reportService;
     }
 
     @PostMapping("signIn")
@@ -41,6 +45,12 @@ public class ClassroomController {
     public ResponseEntity<?> signOut(@RequestBody User user) {
         userService.logOut(user.getUsername());
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("report")
+    public ResponseEntity<?> saveReport(@RequestBody Report report) {
+        reportService.save(report);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("users")
