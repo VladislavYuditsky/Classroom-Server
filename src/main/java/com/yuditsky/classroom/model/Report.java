@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Report {
     private Long id;
-    private String username;
+    private String email;
     private Long generationFrequency;
 }

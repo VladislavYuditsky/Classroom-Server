@@ -18,7 +18,7 @@ public class ReportEntity {
     private Long id;
 
     @Column
-    private String username;
+    private String email;
 
     @Column
     private Long generationFrequency;
