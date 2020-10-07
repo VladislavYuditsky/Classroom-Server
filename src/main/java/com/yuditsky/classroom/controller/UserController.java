@@ -17,17 +17,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class ClassroomController {
+public class UserController {
 
     private final UserService userService;
     private final LoggerService loggerService;
-    private final ReportService reportService;
 
     @Autowired
-    public ClassroomController(UserService userService, LoggerService loggerService, ReportService reportService) {
+    public UserController(UserService userService, LoggerService loggerService) {
         this.userService = userService;
         this.loggerService = loggerService;
-        this.reportService = reportService;
     }
 
     @PostMapping("signIn")
@@ -47,32 +45,11 @@ public class ClassroomController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("report")
-    public ResponseEntity<?> saveReport(@RequestBody Report report) {
-        return new ResponseEntity<>(reportService.save(report), HttpStatus.OK);
-    }
-
     @PostMapping("user/update")
     public ResponseEntity<?> updateEmail(@RequestBody User user) {
         User dbUser = userService.findByUsername(user.getUsername());
         dbUser.setEmail(user.getEmail());
         return new ResponseEntity<>(userService.update(dbUser), HttpStatus.OK);
-    }
-
-    @PostMapping("report/update")
-    public ResponseEntity<?> updateReport(@RequestBody Report report) {
-        System.out.println("1" + report);
-        Report dbReport = reportService.findById(report.getId());
-        System.out.println("2" + dbReport);
-        dbReport.setGenerationFrequency(report.getGenerationFrequency());
-        System.out.println("3" + dbReport);
-        return new ResponseEntity<>(reportService.update(dbReport), HttpStatus.OK);
-    }
-
-    @PostMapping("report/remove")
-    public ResponseEntity<?> removeReport(@RequestBody Report report) {
-        reportService.remove(report);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("users")
@@ -92,11 +69,6 @@ public class ClassroomController {
                                                @RequestParam(value = "search") String filter) {
         List<Logger> logs = loggerService.findByUsernameWithFilter(username, filter);
         return new ResponseEntity<>(logs, HttpStatus.OK);
-    }
-
-    @GetMapping("report/{username}")
-    public ResponseEntity<?> getReport(@PathVariable("username") String username) {
-        return new ResponseEntity<>(reportService.findByRecipientUsername(username), HttpStatus.OK);
     }
 
     @SendTo("/topic/users")
