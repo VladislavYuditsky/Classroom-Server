@@ -47,9 +47,7 @@ public class UserController {
 
     @PostMapping("user/update")
     public ResponseEntity<?> updateEmail(@RequestBody User user) {
-        User dbUser = userService.findByUsername(user.getUsername());
-        dbUser.setEmail(user.getEmail());
-        return new ResponseEntity<>(userService.update(dbUser), HttpStatus.OK);
+        return new ResponseEntity<>(userService.changeEmail(user), HttpStatus.OK);
     }
 
     @GetMapping("users")

@@ -21,4 +21,6 @@ public interface UserService {
     List<User> findAuthorizedUsers();
 
     List<User> findByRole(Role role);
+
+    User changeEmail(User user);
 }

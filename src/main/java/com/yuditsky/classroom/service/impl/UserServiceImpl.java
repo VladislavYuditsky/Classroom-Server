@@ -3,10 +3,7 @@ package com.yuditsky.classroom.service.impl;
 import com.yuditsky.classroom.converter.UserDtoToEntityConverter;
 import com.yuditsky.classroom.converter.UserEntityToDtoConverter;
 import com.yuditsky.classroom.entity.UserEntity;
-import com.yuditsky.classroom.exception.AccessDeniedException;
-import com.yuditsky.classroom.exception.AlreadyAuthorizedException;
-import com.yuditsky.classroom.exception.AlreadyExistedException;
-import com.yuditsky.classroom.exception.EntityNotFoundException;
+import com.yuditsky.classroom.exception.*;
 import com.yuditsky.classroom.model.Action;
 import com.yuditsky.classroom.model.Role;
 import com.yuditsky.classroom.model.User;
@@ -135,5 +132,20 @@ public class UserServiceImpl implements UserService {
                 .map(userEntityToDtoConverter::convert)
                 .sorted(Comparator.comparing(User::getUsername))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public User changeEmail(User user) {
+        String newEmail = user.getEmail();
+        //email validation
+
+        boolean isBusy = userRepository.findByEmail(newEmail).map(userEntityToDtoConverter::convert).isPresent();
+        if (!isBusy) {
+            User userDb = findByUsername(user.getUsername());
+            userDb.setEmail(newEmail);
+            return update(userDb);
+        } else {
+            throw new EmailBusyException("{0} is busy", user.getEmail());
+        }
     }
 }

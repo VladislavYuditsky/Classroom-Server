@@ -20,7 +20,7 @@ public class RestExceptionHandler {
         return handleThrowable(exception, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(AlreadyExistedException.class)
+    @ExceptionHandler({AlreadyExistedException.class, EmailBusyException.class})
     protected ResponseEntity<ErrorMessage> handleAlreadyExistedException(ServiceException exception) {
         log.error(exception);
         return handleThrowable(exception, HttpStatus.CONFLICT);
