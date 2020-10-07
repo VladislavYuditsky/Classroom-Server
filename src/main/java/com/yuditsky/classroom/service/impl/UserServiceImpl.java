@@ -90,12 +90,17 @@ public class UserServiceImpl implements UserService {
     public User logIn(User user) {
         User userDb = userRepository.findByUsername(user.getUsername()).map(userEntityToDtoConverter::convert)
                 .orElseGet(() -> create(user));
-        if (!userDb.isAuthorized()) {
-            userDb.setAuthorized(true);
-            update(userDb);
-            logger.log(userDb.getUsername(), Action.LOG_IN);
+        if (user.getRoles().equals(userDb.getRoles())) {
+            if (!userDb.isAuthorized()) {
+                userDb.setAuthorized(true);
+                update(userDb);
+                logger.log(userDb.getUsername(), Action.LOG_IN);
+            } else {
+                throw new AlreadyAuthorizedException("User with username {0} is already authorized", user.getUsername());
+            }
         } else {
-            throw new AlreadyAuthorizedException("User with username {0} is already authorized", user.getUsername());
+            throw new AccessDeniedException("User with the same name already exists with the {0} role",
+                    userDb.getRoles().iterator().next().toString().toLowerCase());
         }
 
         return userDb;
