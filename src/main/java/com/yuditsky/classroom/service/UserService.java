@@ -10,7 +10,7 @@ public interface UserService {
 
     User findByUsername(String username);
 
-    void update(User user);
+    User update(User user);
 
     User changeHandState(User user);
 

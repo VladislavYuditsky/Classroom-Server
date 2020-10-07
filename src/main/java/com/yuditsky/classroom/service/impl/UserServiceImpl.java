@@ -66,10 +66,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
+    public User update(User user) {
         userValidator.validate(user);
         log.debug("Update {}", user);
-        userRepository.save(userDtoToEntityConverter.convert(user));
+        UserEntity dbUserEntity = userRepository.save(userDtoToEntityConverter.convert(user));
+        return userEntityToDtoConverter.convert(dbUserEntity);
     }
 
     @Override

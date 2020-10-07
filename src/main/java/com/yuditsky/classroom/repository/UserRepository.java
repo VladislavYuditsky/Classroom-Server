@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findUserEntitiesByAuthorized(boolean authorized);
 
     List<UserEntity> findByRoles(Role role);
+
+    void deleteById(Long id);
 }
