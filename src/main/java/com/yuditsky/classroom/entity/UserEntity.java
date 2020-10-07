@@ -36,6 +36,6 @@ public class UserEntity {
     @Column(name = "role")
     private Set<Role> roles;
 
-    @OneToOne(mappedBy = "recipient", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "recipient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ReportEntity reportEntity;
 }
