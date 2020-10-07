@@ -52,6 +52,7 @@ public class ReportScheduler {
             String message = LoggerParser.toString(logs);
             String email = userService.findByUsername(report.getRecipientUsername()).getEmail();
             mailSender.send(email, subject, message);
+            reportService.update(report);
         }
     }
 }
