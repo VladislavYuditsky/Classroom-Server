@@ -6,6 +6,7 @@ import com.yuditsky.classroom.parser.LoggerParser;
 import com.yuditsky.classroom.sender.MailSender;
 import com.yuditsky.classroom.service.LoggerService;
 import com.yuditsky.classroom.service.ReportService;
+import com.yuditsky.classroom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -24,12 +25,19 @@ public class ReportScheduler {
     private final MailSender mailSender;
     private final ReportService reportService;
     private final LoggerService loggerService;
+    private final UserService userService;
 
     @Autowired
-    public ReportScheduler(MailSender mailSender, ReportService reportService, LoggerService loggerService) {
+    public ReportScheduler(
+            MailSender mailSender,
+            ReportService reportService,
+            LoggerService loggerService,
+            UserService userService
+    ) {
         this.mailSender = mailSender;
         this.reportService = reportService;
         this.loggerService = loggerService;
+        this.userService = userService;
     }
 
     @Scheduled(cron = "${cron.expression}")
@@ -42,7 +50,8 @@ public class ReportScheduler {
             String filter = "dateTime>" + LocalDateTime.now().minusDays(report.getGenerationFrequency()).format(formatter);
             List<Logger> logs = loggerService.findAllWithFilter(filter);
             String message = LoggerParser.toString(logs);
-            mailSender.send(report.getEmail(), subject, message);
+            String email = userService.findByUsername(report.getRecipientUsername()).getEmail();
+            mailSender.send(email, subject, message);
         }
     }
 }

@@ -10,7 +10,8 @@ public class ReportEntityToDtoConverter implements Converter<ReportEntity, Repor
     @Override
     public Report convert(ReportEntity reportEntity) {
         Report report = new Report();
-        BeanUtils.copyProperties(reportEntity, report, "reportingDate");
+        BeanUtils.copyProperties(reportEntity, report);
+        report.setRecipientUsername(reportEntity.getRecipient().getUsername());
         return report;
     }
 }

@@ -17,8 +17,9 @@ public class ReportEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String email;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipient_id")
+    private UserEntity recipient;
 
     @Column
     private Long generationFrequency;
