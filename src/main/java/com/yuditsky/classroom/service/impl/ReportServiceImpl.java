@@ -48,6 +48,7 @@ public class ReportServiceImpl implements ReportService {
         UserEntity recipient = userDtoToEntityConverter
                 .convert(userService.findByUsername(report.getRecipientUsername()));
         reportEntity.setRecipient(recipient);
+        log.debug("Saving reportEntity: {}", reportEntity);
         return reportEntityToDtoConverter.convert(reportRepository.save(reportEntity));
     }
 
@@ -84,6 +85,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public void remove(Report report) {
+        log.debug("Remove report with id {}", report.getId());
         reportRepository.deleteById(report.getId());
     }
 }
