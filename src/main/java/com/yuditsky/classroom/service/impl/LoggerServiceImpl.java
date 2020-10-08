@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -34,7 +35,7 @@ public class LoggerServiceImpl implements LoggerService {
         loggerRepository.save(LoggerEntity.builder()
                 .username(username)
                 .action(action)
-                .dateTime(LocalDateTime.now())
+                .dateTime(LocalDateTime.now(ZoneId.of("UTC-0")))
                 .build());
     }
 
