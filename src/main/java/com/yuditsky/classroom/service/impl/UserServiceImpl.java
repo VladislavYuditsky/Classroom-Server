@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User changeEmail(User user) {
         String newEmail = user.getEmail();
-        //email validation
+        userValidator.validateEmail(newEmail);
 
         boolean isBusy = userRepository.findByEmail(newEmail).map(userEntityToDtoConverter::convert).isPresent();
         if (!isBusy) {
