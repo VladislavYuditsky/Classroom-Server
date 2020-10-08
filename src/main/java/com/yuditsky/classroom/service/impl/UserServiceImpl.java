@@ -91,7 +91,9 @@ public class UserServiceImpl implements UserService {
             if (!userDb.isAuthorized()) {
                 userDb.setAuthorized(true);
                 update(userDb);
-                logger.log(userDb.getUsername(), Action.LOG_IN);
+                if (userDb.getRoles().contains(Role.STUDENT)) {
+                    logger.log(userDb.getUsername(), Action.LOG_IN);
+                }
             } else {
                 throw new AlreadyAuthorizedException("User with username {0} is already authorized", user.getUsername());
             }
@@ -110,7 +112,9 @@ public class UserServiceImpl implements UserService {
             user.setAuthorized(false);
             user.setHandUp(false);
             update(user);
-            logger.log(username, Action.LOG_OUT);
+            if (user.getRoles().contains(Role.STUDENT)) {
+                logger.log(username, Action.LOG_OUT);
+            }
         } else {
             throw new AccessDeniedException("User with username {0} is not authorized", username);
         }
