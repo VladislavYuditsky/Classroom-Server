@@ -10,6 +10,7 @@ import com.yuditsky.classroom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,7 +52,9 @@ public class ReportScheduler {
             List<Logger> logs = loggerService.findAllWithFilter(filter);
             String message = LoggerParser.toString(logs);
             String email = userService.findByUsername(report.getRecipientUsername()).getEmail();
-            mailSender.send(email, subject, message);
+            if (!StringUtils.isEmpty(email)) {
+                mailSender.send(email, subject, message);
+            }
             reportService.update(report);
         }
     }
