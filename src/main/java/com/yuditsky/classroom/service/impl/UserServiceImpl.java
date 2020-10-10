@@ -110,11 +110,12 @@ public class UserServiceImpl implements UserService {
         User user = findByUsername(username);
         if (user.isAuthorized()) {
             user.setAuthorized(false);
-            user.setHandUp(false);
-            update(user);
             if (user.getRoles().contains(Role.STUDENT)) {
+                user.setHandUp(false);
+                logger.log(username, Action.HAND_DOWN);
                 logger.log(username, Action.LOG_OUT);
             }
+            update(user);
         } else {
             throw new AccessDeniedException("User with username {0} is not authorized", username);
         }
