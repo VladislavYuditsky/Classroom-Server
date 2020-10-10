@@ -57,6 +57,17 @@ public class LoggerServiceImpl implements LoggerService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Long countAllWithFilter(String filter) {
+        Specification<LoggerEntity> specification = filterToSpecification(filter);
+        return loggerRepository.count(specification);
+    }
+
+    @Override
+    public List<String> findUsernamesByDate(LocalDateTime date) {
+        return loggerRepository.findDistinctUsernameByDateTimeAfter(date);
+    }
+
     private Specification<LoggerEntity> filterToSpecification(String filter) {
         LoggerSpecificationBuilder builder = new LoggerSpecificationBuilder();
         Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)([\\w -:]+?),", Pattern.UNICODE_CHARACTER_CLASS);
