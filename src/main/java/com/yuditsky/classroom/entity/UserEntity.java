@@ -18,13 +18,13 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column
     private boolean isHandUp;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column
@@ -36,6 +36,6 @@ public class UserEntity {
     @Column(name = "role")
     private Set<Role> roles;
 
-    @OneToOne(mappedBy = "recipient", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "recipient", fetch = FetchType.EAGER)
     private ReportEntity reportEntity;
 }

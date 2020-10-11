@@ -20,13 +20,13 @@ public class LoggerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String username;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "action")
+    @Column(name = "action", nullable = false)
     private Action action;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private LocalDateTime dateTime;
 }

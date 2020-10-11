@@ -17,13 +17,13 @@ public class ReportEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "recipient_id")
     private UserEntity recipient;
 
-    @Column
+    @Column(nullable = false)
     private Long generationFrequency;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate reportingDate;
 }
