@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 public class RestExceptionHandler {
 
     @ExceptionHandler({AlreadyAuthorizedException.class, AccessDeniedException.class})
-    public ResponseEntity<ErrorMessage> handle(ServiceException exception) {
+    public ResponseEntity<ErrorMessage> handleAlreadyAuthorizedOrAccessDeniedException(ServiceException exception) {
         log.error(exception);
         return handleThrowable(exception, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({AlreadyExistedException.class, EmailBusyException.class})
-    protected ResponseEntity<ErrorMessage> handleAlreadyExistedException(ServiceException exception) {
+    protected ResponseEntity<ErrorMessage> handleAlreadyExistedOrEmailBusyException(ServiceException exception) {
         log.error(exception);
         return handleThrowable(exception, HttpStatus.CONFLICT);
     }
@@ -33,9 +33,15 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler({ValidationException.class, InvalidDateTimeFormatException.class})
-    protected ResponseEntity<ErrorMessage> handleValidationException(ServiceException exception) {
+    protected ResponseEntity<ErrorMessage> handleValidationOrInvalidDateTimeFormatException(ServiceException exception) {
         log.error(exception);
         return handleThrowable(exception, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({JwtAuthenticationException.class})
+    protected ResponseEntity<ErrorMessage> handleAuthenticationException(ServiceException exception) {
+        log.error(exception);
+        return handleThrowable(exception, HttpStatus.UNAUTHORIZED);
     }
 
     private ResponseEntity<ErrorMessage> handleThrowable(Throwable throwable, HttpStatus httpStatus) {

@@ -13,6 +13,7 @@ import com.yuditsky.classroom.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,6 +43,7 @@ public class ReportServiceImpl implements ReportService {
         this.userDtoToEntityConverter = userDtoToEntityConverter;
     }
 
+    @Transactional
     @Override
     public Report save(Report report) {
         ReportEntity reportEntity = reportDtoToEntityConverter.convert(report);
@@ -68,14 +70,7 @@ public class ReportServiceImpl implements ReportService {
                 });
     }
 
-    @Override
-    public Report findById(Long id) {
-        return reportRepository.findById(id).map(reportEntityToDtoConverter::convert)
-                .orElseThrow(() -> {
-                    throw new EntityNotFoundException("Report with id {0} not found", id);
-                });
-    }
-
+    @Transactional
     @Override
     public Report update(Report report) {
         log.debug("Update {}", report);
@@ -83,6 +78,7 @@ public class ReportServiceImpl implements ReportService {
         return reportEntityToDtoConverter.convert(dbReportEntity);
     }
 
+    @Transactional
     @Override
     public void remove(Report report) {
         log.debug("Remove report with id {}", report.getId());

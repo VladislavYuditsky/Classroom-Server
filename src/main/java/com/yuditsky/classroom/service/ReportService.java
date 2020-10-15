@@ -12,8 +12,6 @@ public interface ReportService {
 
     Report findByRecipientUsername(String username);
 
-    Report findById(Long id);
-
     Report update(Report report);
 
     void remove(Report report);

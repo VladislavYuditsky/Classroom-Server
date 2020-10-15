@@ -14,6 +14,7 @@ import com.yuditsky.classroom.validator.impl.UserValidator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
         this.logger = logger;
     }
 
+    @Transactional
     @Override
     public User create(User user) {
         userRepository.findByUsername(user.getUsername()).ifPresent((userEntity -> {
@@ -62,6 +64,7 @@ public class UserServiceImpl implements UserService {
         });
     }
 
+    @Transactional
     @Override
     public User update(User user) {
         userValidator.validate(user);
@@ -71,8 +74,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changeHandState(User user) {
-        user = findByUsername(user.getUsername());
+    public User changeHandState(String username) {
+        User user = findByUsername(username);
         if (!user.getRoles().contains(Role.TEACHER) && user.isAuthorized()) {
             user.setHandUp(!user.isHandUp());
             update(user);
@@ -111,10 +114,8 @@ public class UserServiceImpl implements UserService {
         if (user.isAuthorized()) {
             user.setAuthorized(false);
             if (user.getRoles().contains(Role.STUDENT)) {
-                if(user.isHandUp()) {
-                    user.setHandUp(false);
-                    logger.log(username, Action.HAND_DOWN);
-                }
+                user.setHandUp(false);
+                logger.log(username, Action.HAND_DOWN);
                 logger.log(username, Action.LOG_OUT);
             }
             update(user);
@@ -142,17 +143,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changeEmail(User user) {
-        String newEmail = user.getEmail();
-        userValidator.validateEmail(newEmail);
+    public User changeEmail(String username, String email) {
+        userValidator.validateEmail(email);
 
-        boolean isBusy = userRepository.findByEmail(newEmail).map(userEntityToDtoConverter::convert).isPresent();
+        boolean isBusy = userRepository.findByEmail(email).map(userEntityToDtoConverter::convert).isPresent();
         if (!isBusy) {
-            User userDb = findByUsername(user.getUsername());
-            userDb.setEmail(newEmail);
-            return update(userDb);
+            User user = findByUsername(username);
+            user.setEmail(email);
+            return update(user);
         } else {
-            throw new EmailBusyException("{0} is busy", user.getEmail());
+            throw new EmailBusyException("{0} is busy", email);
         }
     }
 }

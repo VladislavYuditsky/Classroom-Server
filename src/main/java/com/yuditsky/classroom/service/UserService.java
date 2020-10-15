@@ -12,7 +12,7 @@ public interface UserService {
 
     User update(User user);
 
-    User changeHandState(User user);
+    User changeHandState(String username);
 
     User logIn(User user);
 
@@ -22,5 +22,5 @@ public interface UserService {
 
     List<User> findByRole(Role role);
 
-    User changeEmail(User user);
+    User changeEmail(String username, String email);
 }

@@ -31,8 +31,8 @@ public class UserValidator implements EntityValidator<User> {
         }
     }
 
-    private boolean isValidString(Pattern pattern, String string){
-        if(!StringUtils.isEmpty(string)){
+    private boolean isValidString(Pattern pattern, String string) {
+        if (!StringUtils.isEmpty(string)) {
             Matcher matcher = pattern.matcher(string);
             return matcher.matches();
         } else {
