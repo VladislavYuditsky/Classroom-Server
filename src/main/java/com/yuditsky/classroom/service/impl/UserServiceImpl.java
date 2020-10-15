@@ -114,8 +114,10 @@ public class UserServiceImpl implements UserService {
         if (user.isAuthorized()) {
             user.setAuthorized(false);
             if (user.getRoles().contains(Role.STUDENT)) {
-                user.setHandUp(false);
-                logger.log(username, Action.HAND_DOWN);
+                if (user.isHandUp()) {
+                    user.setHandUp(false);
+                    logger.log(username, Action.HAND_DOWN);
+                }
                 logger.log(username, Action.LOG_OUT);
             }
             update(user);
